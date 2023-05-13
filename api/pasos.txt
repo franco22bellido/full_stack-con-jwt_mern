@@ -1,0 +1,9 @@
+para usar typescript 
+instalar typescript
+para reiniciar typescript
+ts-node-dev
+configar comando tsc y hacer un init de typescript
+npx tsc --init
+rootdir y outdir desmarcarlos y configurarlos.
+configurar el ts-node-dev con src/index.ts en dev;
+todo listo.

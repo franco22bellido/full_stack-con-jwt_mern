@@ -1,0 +1,15 @@
+capitulo 2:
+
+
+react-tostify: minuto 55. trata sobre un modulo para 
+generar mensajes "flash"
+
+useHistory: minuto 58.40: en react router dom6 es cambiado
+por uno que se llama useNavigation, creo
+
+1:05 library react player para ver videos de youtube desde la misma página
+
+1:17 use params para editar
+
+estudiar operador ternario.
+estudia metodo sort y map
