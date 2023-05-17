@@ -1,6 +1,15 @@
 import {Schema, model} from 'mongoose'
 
+export interface Video{
+    title: string;
+    description: string;
+    url: string;
+    userId: string;
+    createdAt: number;
+    updatedAt: number;
+}
 const VideoSchema = new Schema({
+
     title : {
         type: String,
         requied: true,
@@ -12,6 +21,10 @@ const VideoSchema = new Schema({
     url: {
         type: String,
         trim: true,
+        required: true
+    },
+    userId: {
+        type: String,
         required: true
     }
 }, {
