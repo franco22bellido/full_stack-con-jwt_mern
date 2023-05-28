@@ -2,7 +2,8 @@ import bcrypt from 'bcrypt';
 import UserSchema from '../models/User';
 import jwt from 'jsonwebtoken';
 import config from '../config';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
+import {IUserPayload} from '../utils/middleware.jwt';
 
 
 export const register = async (req: Request, res: Response) => {
@@ -46,15 +47,50 @@ export const login = async (req: Request, res: Response) => {
         
         //3 generate token:
         const payload = { userId: userFound._id, username: userFound.username };
-        const token = jwt.sign(payload, config.SECRET_JWT, { expiresIn: "1h" });
+        const token = jwt.sign(payload, config.SECRET_JWT, { expiresIn: "2h" });
 
         //4 response
-        res.header("auth-token", token).json({
+        // res.header("auth-token", token).json({
+        // });
+
+        const data = jwt.verify(token , config.SECRET_JWT);
+        res.json({
             message: "bienvenido:",
-            user : userFound.username
+            user : data,
+            auth : token
         });
         
     } catch (error) {
         res.status(500).json(error);
     }
 }
+export const refreshToken = async (req: Request, res: Response)=> { 
+    const token: string = req.header('token') as string;
+    try {
+        const payload: IUserPayload = jwt.verify(token, config.SECRET_JWT) as IUserPayload;
+        
+        // si el token expiro en al menos dos minutos devolver uno nuevo.
+        //revisar que devuelve el jwt.decode.
+        //si el token no esta expirado y no esta por expirar, devolver el mismo token.
+
+        const newToken = jwt.sign({
+            userId :payload.userId,
+            username : payload.username
+        },config.SECRET_JWT, {expiresIn: "2h"});
+
+        return res.status(200).json({
+            auth : newToken,
+            user : {
+                userId: payload.userId,
+                username: payload.username
+            }
+        });
+    } catch (error) {
+        res.status(401).json("access denied");
+    }
+}
+
+
+
+//en el front hay que pegarle al refresh token cuando haya acciones que requieran
+//hacer consultas a la api.
